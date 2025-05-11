@@ -25,3 +25,9 @@ function addSectionTitle(body, text, level = 2) {
   };
   return body.appendParagraph(text).setHeading(headingMap[level]);
 }
+
+function addKeyValueList(body, entries) {
+  entries.forEach(entry => {
+    body.appendParagraph(`• ${entry.key}: ${entry.value}`);
+  });
+}
