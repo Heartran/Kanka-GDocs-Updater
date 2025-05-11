@@ -24,9 +24,15 @@ function syncAllEntitiesToOneDocument() {
     return;
   }
 
-  const doc = DocumentApp.openById(docId);
-  const body = doc.getBody();
-  body.clear();
+const doc = DocumentApp.openById(docId);
+const body = doc.getBody();
+body.clear();
+
+// Rimuove eventuale paragrafo vuoto residuo
+const first = body.getChild(0);
+if (first && first.getType() === DocumentApp.ElementType.PARAGRAPH && first.asParagraph().getText().trim() === '') {
+  body.removeChild(first);
+}
 
   body.appendParagraph('📘 Enciclopedia Kanka')
       .setHeading(DocumentApp.ParagraphHeading.HEADING1);
