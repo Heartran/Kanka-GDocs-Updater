@@ -6,7 +6,6 @@ function resolveReferences(text) {
     const name = fetchEntityName('entities', id);
     if (!name || name === `[entities:${id}]`) {
       Logger.log(`❌ Reference non risolta: [${type}:${id}]`);
-logToSidebar(`❌ Reference non risolta: [${type}:${id}]`);
       return match;
     }
     return name;

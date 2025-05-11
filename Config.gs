@@ -37,7 +37,6 @@ function getDocumentIdForType(type) {
   const key = ENTITY_DOCUMENT_KEYS[type];
   if (!key) {
     Logger.log(`❌ Tipo non supportato per document ID: ${type}`);
-logToSidebar(`❌ Tipo non supportato per document ID: ${type}`);
     return null;
   }
   return PropertiesService.getScriptProperties().getProperty(key);

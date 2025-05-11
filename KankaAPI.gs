@@ -42,7 +42,6 @@ function fetchCharacters() {
   }
 
   Logger.log(`Totale personaggi trovati: ${characters.length}`);
-logToSidebar(`Totale personaggi trovati: ${characters.length}`);
   return characters;
 }
 
@@ -65,7 +64,6 @@ function fetchEntity(type, id) {
 
   for (const url of tryUrls) {
     Logger.log(`→ CHIAMATA: ${url}`);
-logToSidebar(`→ CHIAMATA: ${url}`);
     Utilities.sleep(1000);
 
     try {
@@ -82,11 +80,9 @@ logToSidebar(`→ CHIAMATA: ${url}`);
         return data;
       } else {
         Logger.log(`→ ERRORE ${code} su ${url}`);
-logToSidebar(`→ ERRORE ${code} su ${url}`);
       }
     } catch (e) {
       Logger.log(`→ Eccezione su ${url}: ${e}`);
-logToSidebar(`→ Eccezione su ${url}: ${e}`);
     }
   }
 
