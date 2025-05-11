@@ -57,7 +57,7 @@ logToSidebar(`🗂 ${type}: trovati ${entities.length} elementi`);
     body.appendParagraph('');
 
     entities.forEach(entity => {
-      const entityData = fetchEntityData(entity.id); // dettagli estesi via API
+      const entityData = getEntities(entity.id); // dettagli estesi via API
       if (!entityData || !entityData.name) return;
 
       if (isCalendarEntity(entityData)) {
