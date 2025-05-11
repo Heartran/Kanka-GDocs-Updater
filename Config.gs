@@ -15,7 +15,8 @@ function getMasterDocumentId() {
 function checkRequiredConfig() {
   const token = getApiToken();
   const campaignId = getCampaignId();
-  const docId = getGoogleDocId();
+  const docId = getMasterDocumentId(); // <-- usa questa ora
+
   const missing = [];
 
   if (!token) missing.push('KANKA_API_TOKEN');
