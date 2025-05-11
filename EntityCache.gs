@@ -14,6 +14,7 @@ function preloadEntityMaps() {
     const map = new Map(entities.map(e => [String(e.id), e.name]));
     entityMaps[type] = map;
     Logger.log(`Precaricati ${map.size} elementi da ${type}`);
+logToSidebar(`Precaricati ${map.size} elementi da ${type}`);
   });
 }
 
@@ -23,6 +24,7 @@ function resolveEntityName(type, id) {
     return map.get(String(id));
   } else {
     Logger.log(`Reference non risolta: ${type}:${id}`);
+logToSidebar(`Reference non risolta: ${type}:${id}`);
     return `[${type}:${id}]`;
   }
 }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre-wrap;
+        padding: 10px;
+      }
+      #log {
+        height: 400px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 5px;
+        background: #f9f9f9;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>🛠 Log</h2>
+    <div id="log">Caricamento...</div>
+
+    <script>
+      function fetchLog() {
+        google.script.run.withSuccessHandler(function(log) {
+          document.getElementById('log').textContent = log || '(vuoto)';
+        }).getLogBuffer();
+      }
+
+      // Fetch ogni 2 secondi
+      fetchLog();
+      setInterval(fetchLog, 2000);
+    </script>
+  </body>
+</html>
