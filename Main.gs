@@ -74,3 +74,7 @@ function syncAllEntitiesToOneDocument() {
 function isCalendarEntity(entityData) {
   return Array.isArray(entityData.months) && Array.isArray(entityData.weekdays);
 }
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
