@@ -39,3 +39,34 @@ function syncKankaToGoogleDoc() {
     throw e;
   }
 }
+
+function syncEntitiesToDoc(type) {
+  const docId = getDocumentIdForType(type);
+  if (!docId) {
+    Logger.log(`❌ Documento non configurato per il tipo: ${type}`);
+    return;
+  }
+
+  const doc = DocumentApp.openById(docId);
+  const body = doc.getBody();
+  const entities = fetchAllEntities(type);
+
+  body.clear();
+  body.appendParagraph(`📄 Elenco: ${type.charAt(0).toUpperCase() + type.slice(1)}`)
+      .setHeading(DocumentApp.ParagraphHeading.HEADING1);
+  body.appendParagraph(`Aggiornato il: ${new Date().toLocaleString()}`);
+  body.appendParagraph('');
+
+  entities.forEach(entity => {
+    const name = entity.name || '(senza nome)';
+    const raw = entity.entry || '';
+    const parsed = resolveReferences(raw);
+    const clean = stripHtml(parsed);
+
+    body.appendParagraph(name).setHeading(DocumentApp.ParagraphHeading.HEADING2);
+    body.appendParagraph(clean);
+    body.appendParagraph('');
+  });
+
+  Logger.log(`✅ Documento aggiornato per ${type}: https://docs.google.com/document/d/${docId}/edit`);
+}
