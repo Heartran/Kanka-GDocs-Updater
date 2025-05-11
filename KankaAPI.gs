@@ -99,3 +99,14 @@ function fetchEntityName(type, id) {
   const entity = fetchEntity(type, id);
   return entity && entity.name ? entity.name : `[${type}:${id}]`;
 }
+
+function getEntityById(entityType, id) {
+  const url = `https://api.kanka.io/1.0/campaigns/${CAMPAIGN_ID}/${entityType}/${id}`;
+  const headers = {
+    Authorization: `Bearer ${KANKA_API_TOKEN}`
+  };
+
+  const response = UrlFetchApp.fetch(url, { headers });
+  const data = JSON.parse(response.getContentText());
+  return data.data;
+}
