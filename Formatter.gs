@@ -82,3 +82,13 @@ function formatCalendarDate(dateStr) {
   ];
   return `${parseInt(day)} ${monthNames[parseInt(month) - 1]} ${year}`;
 }
+
+function formatGenericEntity(doc, entity) {
+  const body = doc.getBody();
+  addSectionTitle(body, entity.name || '(senza nome)', 2);
+
+  const raw = entity.entry || '';
+  const parsed = resolveReferences(raw);
+  const clean = stripHtml(parsed);
+  body.appendParagraph(clean);
+}

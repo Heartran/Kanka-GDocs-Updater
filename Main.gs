@@ -69,3 +69,8 @@ function syncAllEntitiesToOneDocument() {
 
   Logger.log(`✅ Documento aggiornato: https://docs.google.com/document/d/${docId}/edit`);
 }
+
+
+function isCalendarEntity(entityData) {
+  return Array.isArray(entityData.months) && Array.isArray(entityData.weekdays);
+}
