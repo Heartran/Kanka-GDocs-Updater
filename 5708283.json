@@ -1,0 +1,224 @@
+{
+  "data": {
+    "id": 22086,
+    "name": "Calendario di Eldarion",
+    "entry": null,
+    "entry_parsed": null,
+    "tooltip": null,
+    "type": null,
+    "image": null,
+    "focus_x": null,
+    "focus_y": null,
+    "image_full": "",
+    "image_thumb": "https://d3a4xjr8r2ldhu.cloudfront.net/images/defaults/subscribers/calendars.jpeg",
+    "has_custom_image": false,
+    "image_uuid": null,
+    "header_full": null,
+    "header_uuid": null,
+    "has_custom_header": false,
+    "is_private": false,
+    "is_template": false,
+    "is_attributes_private": false,
+    "entity_id": 5708283,
+    "tags": [],
+    "created_at": "2024-01-30T15:21:02.000000Z",
+    "created_by": 238198,
+    "updated_at": "2025-04-26T14:43:19.000000Z",
+    "updated_by": 238198,
+    "urls": {
+      "view": "https://app.kanka.io/w/235025/entities/5708283",
+      "api": null
+    },
+    "attributes": [],
+    "posts": [],
+    "entity_events": [
+      {
+        "id": 257376,
+        "remindable_id": 5708283,
+        "remindable_type": "App\\Models\\Entity",
+        "calendar_id": 22086,
+        "date": "273-12-15",
+        "day": 15,
+        "month": 12,
+        "year": 273,
+        "length": 1,
+        "comment": "Notte di Laires",
+        "is_recurring": true,
+        "recurring_until": null,
+        "recurring_periodicity": "year",
+        "colour": "#1e2e65",
+        "type_id": null,
+        "visibility_id": 1,
+        "created_at": "2024-12-26T15:06:34.000000Z",
+        "created_by": 238198,
+        "updated_at": "2024-12-26T15:06:34.000000Z",
+        "updated_by": null
+      }
+    ],
+    "reminders": [
+      {
+        "id": 257376,
+        "remindable_id": 5708283,
+        "remindable_type": "App\\Models\\Entity",
+        "calendar_id": 22086,
+        "date": "273-12-15",
+        "day": 15,
+        "month": 12,
+        "year": 273,
+        "length": 1,
+        "comment": "Notte di Laires",
+        "is_recurring": true,
+        "recurring_until": null,
+        "recurring_periodicity": "year",
+        "colour": "#1e2e65",
+        "type_id": null,
+        "visibility_id": 1,
+        "created_at": "2024-12-26T15:06:34.000000Z",
+        "created_by": 238198,
+        "updated_at": "2024-12-26T15:06:34.000000Z",
+        "updated_by": null
+      }
+    ],
+    "relations": [],
+    "inventory": [],
+    "entity_abilities": [],
+    "entity_assets": [],
+    "parents": [],
+    "children": [],
+    "date": "3025-5-14",
+    "parameters": {
+      "layout": null
+    },
+    "months": [
+      {
+        "name": "Lairesa",
+        "length": 31,
+        "type": "standard",
+        "alias": ""
+      },
+      {
+        "name": "Kinera",
+        "length": 29,
+        "type": "standard",
+        "alias": ""
+      },
+      {
+        "name": "Eldar",
+        "length": 31,
+        "type": "standard",
+        "alias": ""
+      },
+      {
+        "name": "Nivara",
+        "length": 30,
+        "type": "standard",
+        "alias": ""
+      },
+      {
+        "name": "Flora",
+        "length": 31,
+        "type": "standard",
+        "alias": ""
+      },
+      {
+        "name": "Solara",
+        "length": 30,
+        "type": "standard",
+        "alias": ""
+      },
+      {
+        "name": "Ignara",
+        "length": 31,
+        "type": "standard",
+        "alias": ""
+      },
+      {
+        "name": "Altara",
+        "length": 31,
+        "type": "standard",
+        "alias": ""
+      },
+      {
+        "name": "Venta",
+        "length": 30,
+        "type": "standard",
+        "alias": ""
+      },
+      {
+        "name": "Folia",
+        "length": 31,
+        "type": "standard",
+        "alias": ""
+      },
+      {
+        "name": "Mora",
+        "length": 30,
+        "type": "standard",
+        "alias": ""
+      },
+      {
+        "name": "Nocta",
+        "length": 31,
+        "type": "standard",
+        "alias": ""
+      }
+    ],
+    "weekdays": [
+      "Lunadia",
+      "Leodia",
+      "Merlinia",
+      "Zaraia",
+      "Rayania",
+      "Nyxia",
+      "Auronia"
+    ],
+    "years": [],
+    "seasons": [
+      {
+        "name": "Stagione della luce",
+        "month": 1,
+        "day": 3
+      },
+      {
+        "name": "Stagione del fuoco",
+        "month": 4,
+        "day": 6
+      },
+      {
+        "name": "Stagione del vento",
+        "month": 7,
+        "day": 9
+      },
+      {
+        "name": "Stagione della notte",
+        "month": 10,
+        "day": 12
+      }
+    ],
+    "moons": [
+      {
+        "name": "Laires",
+        "fullmoon": 15,
+        "offset": 0,
+        "colour": "grey",
+        "id": 1
+      },
+      {
+        "name": "Kineras",
+        "fullmoon": 31,
+        "offset": 0,
+        "colour": "maroon",
+        "id": 2
+      }
+    ],
+    "start_offset": 0,
+    "suffix": null,
+    "format": null,
+    "has_leap_year": 0,
+    "skip_year_zero": 0,
+    "leap_year_amount": null,
+    "leap_year_month": 1,
+    "leap_year_offset": null,
+    "leap_year_start": null
+  }
+}
