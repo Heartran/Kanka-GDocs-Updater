@@ -83,6 +83,14 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+function onOpen() {
+  DocumentApp.getUi()
+    .createMenu('🔄 Kanka Sync')
+    .addItem('Avvia sincronizzazione', 'syncAllEntitiesToOneDocument')
+    .addToUi()
+    .addItem('Visualizza log', 'appendLogsToDocument');
+}
+
 function showSidebar() {
   const html = HtmlService.createHtmlOutputFromFile('Sidebar')
     .setTitle('Log sincronizzazione')
