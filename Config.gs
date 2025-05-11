@@ -1,11 +1,4 @@
-const ENTITY_DOCUMENT_KEYS = {
-  characters: 'GOOGLE_DOC_CHARACTERS_ID',
-  locations: 'GOOGLE_DOC_LOCATIONS_ID',
-  families: 'GOOGLE_DOC_FAMILIES_ID',
-  races: 'GOOGLE_DOC_RACES_ID'
-  // puoi aggiungere altri tipi qui in futuro
-};
-
+const MASTER_DOCUMENT_KEY = 'GOOGLE_DOC_ID';
 
 function getApiToken() {
   return PropertiesService.getScriptProperties().getProperty('KANKA_API_TOKEN');
@@ -15,8 +8,8 @@ function getCampaignId() {
   return PropertiesService.getScriptProperties().getProperty('CAMPAIGN_ID');
 }
 
-function getGoogleDocId() {
-  return PropertiesService.getScriptProperties().getProperty('GOOGLE_DOC_ID');
+function getMasterDocumentId() {
+  return PropertiesService.getScriptProperties().getProperty(MASTER_DOCUMENT_KEY);
 }
 
 function checkRequiredConfig() {
