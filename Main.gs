@@ -47,6 +47,7 @@ function syncAllEntitiesToOneDocument() {
   supportedTypes.forEach(type => {
     const entities = fetchAllEntities(type); // funzione API che ritorna lista base
     Logger.log(`🗂 ${type}: trovati ${entities.length} elementi`);
+logToSidebar(`🗂 ${type}: trovati ${entities.length} elementi`);
 
     body.appendParagraph('📁 ' + capitalize(type)).setHeading(DocumentApp.ParagraphHeading.HEADING1);
     body.appendParagraph('');
@@ -57,9 +58,11 @@ function syncAllEntitiesToOneDocument() {
 
       if (isCalendarEntity(entityData)) {
         Logger.log("📆 Calendario: " + entityData.name);
+logToSidebar("📆 Calendario: " + entityData.name);
         formatCalendarData(doc, entityData);
       } else {
         Logger.log("📄 Entità: " + entityData.name);
+logToSidebar("📄 Entità: " + entityData.name);
         formatGenericEntity(doc, entityData);
       }
 
@@ -68,6 +71,7 @@ function syncAllEntitiesToOneDocument() {
   });
 
   Logger.log(`✅ Documento aggiornato: https://docs.google.com/document/d/${docId}/edit`);
+logToSidebar(`✅ Documento aggiornato: https://docs.google.com/document/d/${docId}/edit`);
 }
 
 
