@@ -70,3 +70,19 @@ function syncEntitiesToDoc(type) {
 
   Logger.log(`✅ Documento aggiornato per ${type}: https://docs.google.com/document/d/${docId}/edit`);
 }
+
+function syncAllEntityTypes() {
+  // Se vuoi mantenere la cache in memoria anche con le API singole
+  preloadEntityMaps(); 
+
+  const supportedTypes = Object.keys(ENTITY_DOCUMENT_KEYS);
+
+  supportedTypes.forEach(type => {
+    try {
+      Logger.log(`🔄 Sincronizzazione in corso per: ${type}`);
+      syncEntitiesToDoc(type);
+    } catch (e) {
+      Logger.log(`❌ Errore durante la sincronizzazione di ${type}: ${e}`);
+    }
+  });
+}
