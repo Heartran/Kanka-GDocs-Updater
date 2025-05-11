@@ -96,11 +96,16 @@ function onOpen() {
 }
 
 function showSidebar() {
-  const html = HtmlService.createHtmlOutputFromFile('Sidebar')
-    .setTitle('Log sincronizzazione')
-    .setWidth(300);
-  DocumentApp.getUi().showSidebar(html);
+  try {
+    const ui = DocumentApp.getUi(); // Se fallisce, siamo fuori da un documento
+    const html = HtmlService.createHtmlOutputFromFile('Sidebar')
+      .setTitle('🛠 Log');
+    ui.showSidebar(html);
+  } catch (e) {
+    Logger.log("❌ Impossibile mostrare la sidebar: non sei in un documento Google Docs.");
+  }
 }
+
 
 function getLogBuffer() {
   const props = PropertiesService.getUserProperties();
