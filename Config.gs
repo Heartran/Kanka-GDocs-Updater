@@ -1,3 +1,12 @@
+const ENTITY_DOCUMENT_KEYS = {
+  characters: 'GOOGLE_DOC_CHARACTERS_ID',
+  locations: 'GOOGLE_DOC_LOCATIONS_ID',
+  families: 'GOOGLE_DOC_FAMILIES_ID',
+  races: 'GOOGLE_DOC_RACES_ID'
+  // puoi aggiungere altri tipi qui in futuro
+};
+
+
 function getApiToken() {
   return PropertiesService.getScriptProperties().getProperty('KANKA_API_TOKEN');
 }
