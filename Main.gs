@@ -1,4 +1,8 @@
 function syncAllEntitiesToOneDocument() {
+  showSidebar();
+  clearLogBuffer();
+  logToSidebar('🚀 Sincronizzazione avviata...');
+
   checkRequiredConfig();
   preloadEntityMaps();
 
