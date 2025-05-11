@@ -95,3 +95,35 @@ function fetchEntityName(type, id) {
   const entity = fetchEntity(type, id);
   return entity && entity.name ? entity.name : `[${type}:${id}]`;
 }
+
+function fetchEntityData(entityId) {
+  const token = getApiToken();
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+    'Accept': 'application/json'
+  };
+
+  const url = `https://api.kanka.io/1.0/entities/${entityId}`;
+  Logger.log(`→ FETCH entityData: ${url}`);
+  Utilities.sleep(1000); // prevenzione rate limit
+
+  try {
+    const response = UrlFetchApp.fetch(url, {
+      method: 'get',
+      headers,
+      muteHttpExceptions: true
+    });
+
+    const code = response.getResponseCode();
+    if (code === 200) {
+      const json = JSON.parse(response.getContentText());
+      return json.data;
+    } else {
+      Logger.log(`❌ Errore ${code} su fetchEntityData(${entityId}): ${response.getContentText()}`);
+    }
+  } catch (e) {
+    Logger.log(`❌ Eccezione fetchEntityData(${entityId}): ${e}`);
+  }
+
+  return null;
+}

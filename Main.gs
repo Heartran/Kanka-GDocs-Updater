@@ -24,15 +24,20 @@ function syncAllEntitiesToOneDocument() {
     return;
   }
 
-const doc = DocumentApp.openById(docId);
-const body = doc.getBody();
-body.clear();
+  const doc = DocumentApp.openById(docId);
+  const body = doc.getBody();
+  body.clear(); // pulizia completa
 
-// Rimuove eventuale paragrafo vuoto residuo
-const first = body.getChild(0);
-if (first && first.getType() === DocumentApp.ElementType.PARAGRAPH && first.asParagraph().getText().trim() === '') {
-  body.removeChild(first);
-}
+  // Google Docs lascia sempre almeno un paragrafo vuoto dopo clear()
+  // quindi NON proviamo a rimuoverlo, lo svuotiamo semplicemente
+  const first = body.getChild(0);
+  if (
+    first &&
+    first.getType() === DocumentApp.ElementType.PARAGRAPH
+  ) {
+    first.asParagraph().clear();
+  }
+
 
   body.appendParagraph('📘 Enciclopedia Kanka')
       .setHeading(DocumentApp.ParagraphHeading.HEADING1);
@@ -64,12 +69,4 @@ if (first && first.getType() === DocumentApp.ElementType.PARAGRAPH && first.asPa
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function onOpen() {
-  DocumentApp.getUi()
-    .createMenu('🔄 Kanka Sync')
-    .addItem('Avvia sincronizzazione', 'syncAllEntitiesToOneDocument')
-    .addToUi()
-    .addItem('Visualizza log', 'appendLogsToDocument');
 }
