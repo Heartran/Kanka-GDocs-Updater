@@ -16,3 +16,12 @@ function stripHtml(html) {
   if (!html) return '';
   return html.replace(/<[^>]*>/g, '').trim();
 }
+
+function addSectionTitle(body, text, level = 2) {
+  const headingMap = {
+    1: DocumentApp.ParagraphHeading.HEADING1,
+    2: DocumentApp.ParagraphHeading.HEADING2,
+    3: DocumentApp.ParagraphHeading.HEADING3
+  };
+  return body.appendParagraph(text).setHeading(headingMap[level]);
+}
