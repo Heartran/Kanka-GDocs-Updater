@@ -65,3 +65,11 @@ if (first && first.getType() === DocumentApp.ElementType.PARAGRAPH && first.asPa
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+function onOpen() {
+  DocumentApp.getUi()
+    .createMenu('🔄 Kanka Sync')
+    .addItem('Avvia sincronizzazione', 'syncAllEntitiesToOneDocument')
+    .addToUi();
+    .addItem('Visualizza log', 'appendLogsToDocument')
+}
