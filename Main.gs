@@ -70,6 +70,6 @@ function onOpen() {
   DocumentApp.getUi()
     .createMenu('🔄 Kanka Sync')
     .addItem('Avvia sincronizzazione', 'syncAllEntitiesToOneDocument')
-    .addToUi();
-    .addItem('Visualizza log', 'appendLogsToDocument')
+    .addToUi()
+    .addItem('Visualizza log', 'appendLogsToDocument');
 }
