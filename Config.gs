@@ -4,34 +4,32 @@ function getApiToken() {
   return PropertiesService.getScriptProperties().getProperty('KANKA_API_TOKEN');
 }
 
+// Recupera il valore della proprietà dallo script
 function getCampaignId() {
   return PropertiesService.getScriptProperties().getProperty('CAMPAIGN_ID');
 }
 
-function getMasterDocumentId() {
-  return PropertiesService.getScriptProperties().getProperty(MASTER_DOCUMENT_KEY);
+function getKankaApiToken() {
+  return PropertiesService.getScriptProperties().getProperty('KANKA_API_TOKEN');
 }
 
-function checkRequiredConfig() {
-  const token = getApiToken();
-  const campaignId = getCampaignId();
-  const docId = getMasterDocumentId(); // <-- usa questa ora
+function getMasterDocumentId() {
+  return PropertiesService.getScriptProperties().getProperty('GOOGLE_DOC_ID');
+}
 
+// Controlla che tutte le proprietà siano settate, altrimenti lancia errore
+function checkRequiredConfig() {
   const missing = [];
 
-  if (!token) missing.push('KANKA_API_TOKEN');
-  if (!campaignId) missing.push('CAMPAIGN_ID');
-  if (!docId) missing.push('GOOGLE_DOC_ID');
-
-  Logger.log('Configurazione:');
-  Logger.log(' - Token API: %s', token ? 'OK' : 'MANCANTE');
-  Logger.log(' - ID Campagna: %s', campaignId ? 'OK' : 'MANCANTE');
-  Logger.log(' - ID Google Doc: %s', docId ? 'OK' : 'MANCANTE');
+  if (!getKankaApiToken()) missing.push('KANKA_API_TOKEN');
+  if (!getCampaignId()) missing.push('CAMPAIGN_ID');
+  if (!getMasterDocumentId()) missing.push('GOOGLE_DOC_ID');
 
   if (missing.length > 0) {
-    throw new Error('Variabili mancanti: ' + missing.join(', '));
+    throw new Error('❌ Variabili mancanti: ' + missing.join(', '));
   }
 }
+
 
 function getDocumentIdForType(type) {
   const key = ENTITY_DOCUMENT_KEYS[type];
