@@ -34,8 +34,16 @@ function addKeyValueList(body, entries) {
 
 function addTable(body, headers, rows) {
   const table = body.appendTable();
-  table.appendTableRow().appendTableCells(headers);
-  rows.forEach(row => table.appendTableRow().appendTableCells(row));
+
+  // Add header cells
+  const headerRow = table.appendTableRow();
+  headers.forEach(h => headerRow.appendTableCell(String(h)));
+
+  // Add data rows
+  rows.forEach(row => {
+    const tr = table.appendTableRow();
+    row.forEach(cell => tr.appendTableCell(String(cell)));
+  });
 }
 
 function formatCalendarData(doc, entity) {
