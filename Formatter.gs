@@ -23,7 +23,9 @@ function addSectionTitle(body, text, level = 2) {
     2: DocumentApp.ParagraphHeading.HEADING2,
     3: DocumentApp.ParagraphHeading.HEADING3
   };
-  return body.appendParagraph(text).setHeading(headingMap[level]);
+  const paragraph = body.appendParagraph(text);
+  paragraph.setHeading(headingMap[level] || DocumentApp.ParagraphHeading.NORMAL);
+  return paragraph;
 }
 
 function addKeyValueList(body, entries) {
