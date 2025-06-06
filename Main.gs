@@ -53,15 +53,9 @@ function syncAllEntitiesToOneDocument() {
     body.appendParagraph('');
 
     entities.forEach(entity => {
-      const name = entity.name || '(senza nome)';
-      const raw = entity.entry || '';
-      const parsed = resolveReferences(raw);
-      const clean = stripHtml(parsed);
+  renderEntityByType(type, entity, doc);
+});
 
-      body.appendParagraph(name).setHeading(DocumentApp.ParagraphHeading.HEADING2);
-      body.appendParagraph(clean);
-      body.appendParagraph('');
-    });
   });
 
   Logger.log(`✅ Documento aggiornato: https://docs.google.com/document/d/${docId}/edit`);
