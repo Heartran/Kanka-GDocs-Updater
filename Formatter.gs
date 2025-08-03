@@ -31,8 +31,12 @@ function addSectionTitle(body, text, level = 2) {
 function addEntityImage(body, entity) {
   if (entity?.image_full) {
     try {
-      const blob = UrlFetchApp.fetch(entity.image_full).getBlob();
-      body.appendImage(blob);
+      const response = UrlFetchApp.fetch(entity.image_full, { muteHttpExceptions: true });
+      if (response.getResponseCode() >= 400) {
+        Logger.log(`Impossibile caricare l'immagine (${response.getResponseCode()}): ${entity.image_full}`);
+        return;
+      }
+      body.appendImage(response.getBlob());
     } catch (e) {
       Logger.log(`Errore nel caricamento dell'immagine: ${e}`);
     }
