@@ -32,13 +32,25 @@ function addEntityImage(body, entity) {
   if (entity?.image_full) {
     try {
       const response = UrlFetchApp.fetch(entity.image_full, { muteHttpExceptions: true });
-      if (response.getResponseCode() >= 400) {
-        Logger.log(`Impossibile caricare l'immagine (${response.getResponseCode()}): ${entity.image_full}`);
+      const code = response.getResponseCode();
+      const name = entity.name || '(senza nome)';
+      if (code >= 400) {
+        console.warn(`Impossibile caricare l'immagine per ${name} (HTTP ${code}): ${entity.image_full}`);
         return;
       }
-      body.appendImage(response.getBlob());
+
+      const blob = response.getBlob();
+      const contentType = blob.getContentType() || '';
+      const bytes = blob.getBytes();
+      if (!contentType.startsWith('image/') || !bytes || bytes.length === 0) {
+        console.warn(`Dati immagine non validi per ${name}: ${entity.image_full}`);
+        return;
+      }
+
+      body.appendImage(blob);
     } catch (e) {
-      Logger.log(`Errore nel caricamento dell'immagine: ${e}`);
+      const name = entity?.name || '(senza nome)';
+      console.error(`Errore nel caricamento dell'immagine per ${name}: ${e}`);
     }
   }
 }
