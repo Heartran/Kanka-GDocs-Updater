@@ -28,6 +28,17 @@ function addSectionTitle(body, text, level = 2) {
   return paragraph;
 }
 
+function addEntityImage(body, entity) {
+  if (entity?.image_full) {
+    try {
+      const blob = UrlFetchApp.fetch(entity.image_full).getBlob();
+      body.appendImage(blob);
+    } catch (e) {
+      Logger.log(`Errore nel caricamento dell'immagine: ${e}`);
+    }
+  }
+}
+
 function addKeyValueList(body, entries) {
   entries.forEach(entry => {
     body.appendParagraph(`• ${entry.key}: ${entry.value}`);
@@ -51,6 +62,7 @@ function addTable(body, headers, rows) {
 function formatCalendarData(doc, entity) {
   const body = doc.getBody();
   addSectionTitle(body, entity.name || "Calendario");
+  addEntityImage(body, entity);
 
   body.appendParagraph(`📅 Data di riferimento: ${formatCalendarDate(entity.date)}`);
 
@@ -96,6 +108,7 @@ function formatCalendarDate(dateStr) {
 function formatTimelineData(doc, entity) {
   const body = doc.getBody();
   addSectionTitle(body, entity.name || "📜 Timeline", 2);
+  addEntityImage(body, entity);
 
   if (!entity.eras || entity.eras.length === 0) {
     body.appendParagraph("⚠️ Nessuna era presente in questa timeline.");
