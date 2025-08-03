@@ -35,22 +35,20 @@ function addEntityImage(body, entity) {
       const code = response.getResponseCode();
       const name = entity.name || '(senza nome)';
       if (code >= 400) {
-        console.warn(`Impossibile caricare l'immagine per ${name} (HTTP ${code}): ${entity.image_full}`);
+        Logger.log(`⚠️ Impossibile caricare l'immagine per ${name} (HTTP ${code}): ${entity.image_full}`);
         return;
       }
-
       const blob = response.getBlob();
       const contentType = blob.getContentType() || '';
       const bytes = blob.getBytes();
       if (!contentType.startsWith('image/') || !bytes || bytes.length === 0) {
-        console.warn(`Dati immagine non validi per ${name}: ${entity.image_full}`);
-        return;
+        Logger.log(`⚠️ Dati immagine non validi per ${name}: ${entity.image_full}`);
       }
 
       body.appendImage(blob);
     } catch (e) {
       const name = entity?.name || '(senza nome)';
-      console.error(`Errore nel caricamento dell'immagine per ${name}: ${e}`);
+      Logger.log(`❌ Errore nel caricamento dell'immagine per ${name}: ${e}`);
     }
   }
 }
