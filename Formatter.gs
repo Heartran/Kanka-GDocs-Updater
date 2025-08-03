@@ -38,13 +38,11 @@ function addEntityImage(body, entity) {
         Logger.log(`⚠️ Impossibile caricare l'immagine per ${name} (HTTP ${code}): ${entity.image_full}`);
         return;
       }
-
       const blob = response.getBlob();
       const contentType = blob.getContentType() || '';
       const bytes = blob.getBytes();
       if (!contentType.startsWith('image/') || !bytes || bytes.length === 0) {
         Logger.log(`⚠️ Dati immagine non validi per ${name}: ${entity.image_full}`);
-        return;
       }
 
       body.appendImage(blob);
