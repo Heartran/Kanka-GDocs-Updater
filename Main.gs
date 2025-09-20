@@ -1,6 +1,5 @@
 function syncAllEntitiesToOneDocument() {
   checkRequiredConfig();
-  preloadEntityMaps();
 
   const supportedTypes = [
     'characters',
@@ -17,6 +16,9 @@ function syncAllEntitiesToOneDocument() {
     'calendars',
     'timelines'
   ];
+
+  const referenceTypes = Array.from(new Set(supportedTypes.concat(['tags'])));
+  const entitiesByType = preloadEntityMaps(referenceTypes);
 
   const docId = getMasterDocumentId();
   if (!docId) {
@@ -45,7 +47,7 @@ function syncAllEntitiesToOneDocument() {
   body.appendParagraph('');
 
   supportedTypes.forEach(type => {
-    const entities = fetchAllEntities(type);
+    const entities = entitiesByType[type] || [];
     Logger.log(`🗂 ${type}: trovati ${entities.length} elementi`);
 
     body.appendParagraph('📁 ' + capitalize(type))
@@ -53,8 +55,8 @@ function syncAllEntitiesToOneDocument() {
     body.appendParagraph('');
 
     entities.forEach(entity => {
-  renderEntityByType(type, entity, doc);
-});
+      renderEntityByType(type, entity, doc);
+    });
 
   });
 
