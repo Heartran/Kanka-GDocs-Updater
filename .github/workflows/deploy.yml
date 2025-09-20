@@ -2,8 +2,8 @@ name: Deploy to Google Apps Script
 
 on:
   push:
-    branches: [ "External-script" ]   # cambia se rilasci da un altro branch
-  workflow_dispatch:       # così puoi lanciarla anche a mano
+    branches: [ "main" ]   # cambia se rilasci da un altro branch
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -21,16 +21,26 @@ jobs:
       - name: Install clasp
         run: npm i -g @google/clasp
 
-      # Crea .clasp.json se NON lo committi nel repo
-      - name: Create .clasp.json (optional)
-        if: ${{ secrets.SCRIPT_ID != '' }}
+      # Se SCRIPT_ID è presente nei secrets, genera .clasp.json al volo.
+      # Altrimenti si assume che .clasp.json sia già nel repo.
+      - name: Create .clasp.json if secret is set
+        env:
+          SCRIPT_ID: ${{ secrets.SCRIPT_ID }}
         run: |
-          echo '{"scriptId":"'"${{ secrets.SCRIPT_ID }}"'","rootDir":"."}' > .clasp.json
+          if [ -n "${SCRIPT_ID}" ]; then
+            echo "{\"scriptId\":\"${SCRIPT_ID}\",\"rootDir\":\".\"}" > .clasp.json
+            echo "Created .clasp.json from secret."
+          else
+            echo "No SCRIPT_ID secret found. Assuming .clasp.json is committed."
+            [ -f .clasp.json ] && cat .clasp.json || echo "WARNING: .clasp.json not found."
+          fi
 
-      # Auth: usa i token generati dal tuo login locale
+      # Autenticazione: usiamo i token generati dal tuo login locale
       - name: Authenticate clasp
         run: |
           echo '${{ secrets.CLASP_CREDENTIALS }}' > ~/.clasprc.json
+          # piccolo sanity check
+          test -s ~/.clasprc.json && echo "clasprc present" || (echo "Missing clasprc" && exit 1)
 
       - name: Push to Apps Script
         run: clasp push -f
