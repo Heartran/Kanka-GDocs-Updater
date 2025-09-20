@@ -113,7 +113,6 @@ function resolveEntityName(type, id) {
       return map.get(key);
     }
   }
-
   const lookupType = normalized || type;
   const fetchedName = fetchEntityName(lookupType, id);
   if (fetchedName && fetchedName !== `[${lookupType}:${id}]`) {
@@ -125,6 +124,5 @@ function resolveEntityName(type, id) {
     missingReferenceKeys.add(missingKey);
     Logger.log(`Reference non risolta: ${lookupType}:${key}`);
   }
-
   return `[${type}:${id}]`;
 }
