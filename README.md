@@ -60,4 +60,21 @@ La sincronizzazione:
 
 - Assicurati di avere i permessi necessari sia su Kanka che sul documento Google
 - Il token API di Kanka deve avere i permessi di lettura per le entità della campagna
-- Il documento Google deve essere accessibile in scrittura dallo script 
+- Il documento Google deve essere accessibile in scrittura dallo script
+
+## 🤖 Deploy automatico con GitHub Actions
+
+Il repository include un workflow (`.github/workflows/deploy.yml`) che spinge automaticamente il codice su Google Apps Script quando effettui un push sul branch `External-script` o avvii manualmente il workflow da GitHub.
+
+1. Crea due secret nel repository:
+   - `CLASP_CREDENTIALS`: copia il contenuto del file `~/.clasprc.json` generato da `clasp login --creds`.
+   - `SCRIPT_ID`: l'ID dello script Apps Script di destinazione.
+2. (Opzionale) Non committare il file `.clasp.json`: il workflow lo genera in automatico se hai impostato il secret `SCRIPT_ID`.
+3. Esegui `clasp push -f` in locale almeno una volta per verificare che la configurazione funzioni.
+4. Effettua push su `External-script` oppure avvia manualmente il workflow da **Actions → Deploy to Google Apps Script**.
+
+Durante l'esecuzione, il workflow si occupa di:
+
+- Installare Node.js 20 e l'ultima versione di `@google/clasp`.
+- Autenticarsi usando i secret che hai configurato.
+- Caricare il progetto su Apps Script, creando opzionalmente una versione e una pubblicazione.
