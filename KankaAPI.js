@@ -49,45 +49,46 @@ function fetchCharacters() {
 
 function fetchEntity(type, id) {
   const cacheKey = `${type}:${id}`;
-  if (entityCache.hasOwnProperty(cacheKey)) return entityCache[cacheKey];
+  if (Object.prototype.hasOwnProperty.call(entityCache, cacheKey)) {
+    return entityCache[cacheKey];
+  }
 
   const token = getApiToken();
   const campaignId = getCampaignId();
   const baseUrl = `https://api.kanka.io/1.0/campaigns/${campaignId}`;
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Accept': 'application/json'
-  };
+  const headers = { Authorization: `Bearer ${token}`, Accept: 'application/json' };
 
-  const tryUrls = [
+  const urls = [
     `${baseUrl}/${type}/${id}`,
-    `${baseUrl}/entities/${id}`  // fallback generico
+    `${baseUrl}/entities/${id}`
   ];
 
-  for (const url of tryUrls) {
-    Logger.log(`→ CHIAMATA: ${url}`);
-    Utilities.sleep(1000);
+  const MAX_RETRIES = 3;
 
-    try {
-      const response = UrlFetchApp.fetch(url, {
-        method: 'get',
-        headers,
-        muteHttpExceptions: true
-      });
+  for (const url of urls) {
+    let attempt = 0;
+    while (attempt < MAX_RETRIES) {
+      try {
+        const res = UrlFetchApp.fetch(url, { method: 'get', headers, muteHttpExceptions: true });
+        const code = res.getResponseCode();
 
-      const code = response.getResponseCode();
-      if (code === 200) {
-        const data = JSON.parse(response.getContentText()).data;
-        entityCache[cacheKey] = data;
-        if (data && data.id && data.name) {
-          storeEntityName(type, data.id, data.name);
+        if (code === 200) {
+          const data = JSON.parse(res.getContentText()).data;
+          entityCache[cacheKey] = data;
+          return data;
         }
-        return data;
-      } else {
-        Logger.log(`→ ERRORE ${code} su ${url}`);
+
+        if (code === 429 || (code >= 500 && code < 600)) {
+          Utilities.sleep(250 * Math.pow(2, attempt));
+          attempt++;
+          continue;
+        }
+
+        break;
+      } catch (e) {
+        Utilities.sleep(250 * Math.pow(2, attempt));
+        attempt++;
       }
-    } catch (e) {
-      Logger.log(`→ Eccezione su ${url}: ${e}`);
     }
   }
 
