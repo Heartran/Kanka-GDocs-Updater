@@ -28,7 +28,7 @@ function renderEntityByType(type, entity, doc) {
 
   const body = doc.getBody();
   body.appendParagraph(name).setHeading(DocumentApp.ParagraphHeading.HEADING2);
-  addEntityImage(body, entity);
+  addEntityImagePlaceholder(body, type, entity);
   body.appendParagraph(clean);
   body.appendParagraph('');
 }
