@@ -97,32 +97,20 @@ function preloadEntityMaps(types) {
 
 function resolveEntityName(type, id) {
   if (!id) return '';
+
   const normalized = normalizeReferenceType(type);
   const key = String(id);
+  const map = normalized ? entityMaps[normalized] : undefined;
 
-  if (normalized) {
-    ensureEntityMap(normalized);
-    if (entityMaps[normalized].has(key)) {
-      return entityMaps[normalized].get(key);
-    }
+  if (map && map.has(key)) {
+    return map.get(key);
   }
 
-  for (const mapType in entityMaps) {
-    const map = entityMaps[mapType];
-    if (map && map.has(key)) {
-      return map.get(key);
-    }
-  }
   const lookupType = normalized || type;
-  const fetchedName = fetchEntityName(lookupType, id);
-  if (fetchedName && fetchedName !== `[${lookupType}:${id}]`) {
-    return fetchedName;
+  const name = fetchEntityName(lookupType, id);
+  if (name && !/^\[.+:\d+\]$/.test(name)) {
+    return name;
   }
 
-  const missingKey = `${lookupType}:${key}`;
-  if (!missingReferenceKeys.has(missingKey)) {
-    missingReferenceKeys.add(missingKey);
-    Logger.log(`Reference non risolta: ${lookupType}:${key}`);
-  }
   return `[${type}:${id}]`;
 }
