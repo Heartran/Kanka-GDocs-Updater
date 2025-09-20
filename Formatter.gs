@@ -167,4 +167,3 @@ function formatTimelineData(doc, entity) {
     body.appendParagraph(""); // spazio extra
   });
 }
-
