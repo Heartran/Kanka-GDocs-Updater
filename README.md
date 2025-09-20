@@ -33,8 +33,9 @@ Per utilizzare l'applicazione, è necessario configurare le seguenti variabili d
 1. Apri lo script in Google Apps Script
 2. Configura le variabili d'ambiente necessarie
 3. Esegui la funzione `syncAllEntitiesToOneDocument()`
+4. (Opzionale) Per popolare le immagini, avvia la funzione `syncEntityImages()` dopo che il documento è stato aggiornato
 
-Il documento verrà aggiornato automaticamente con tutte le entità della tua campagna, organizzate per tipo.
+Il documento verrà aggiornato automaticamente con tutte le entità della tua campagna, organizzate per tipo. I segnaposto delle immagini (`{{IMAGE:tipo:id}}`) verranno sostituiti dalle immagini reali solo quando esegui la funzione dedicata.
 
 ## 📝 Formattazione
 

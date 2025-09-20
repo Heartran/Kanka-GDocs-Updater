@@ -1,7 +1,7 @@
 function formatCharacterData(doc, entity) {
   const body = doc.getBody();
   addSectionTitle(body, entity.name || '(senza nome)', 2);
-  addEntityImage(body, entity);
+  addEntityImagePlaceholder(body, 'characters', entity);
 
   // Descrizione
   const raw = entity.entry || '';
