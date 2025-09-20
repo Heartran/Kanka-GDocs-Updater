@@ -19,6 +19,8 @@ function fetchAllEntities(type) {
     nextUrl = json.links && json.links.next ? json.links.next : null;
   }
 
+  rememberEntityNames(type, results);
+
   return results;
 }
 
@@ -77,6 +79,9 @@ function fetchEntity(type, id) {
       if (code === 200) {
         const data = JSON.parse(response.getContentText()).data;
         entityCache[cacheKey] = data;
+        if (data && data.id && data.name) {
+          storeEntityName(type, data.id, data.name);
+        }
         return data;
       } else {
         Logger.log(`→ ERRORE ${code} su ${url}`);
@@ -117,7 +122,11 @@ function fetchEntityData(entityId) {
     const code = response.getResponseCode();
     if (code === 200) {
       const json = JSON.parse(response.getContentText());
-      return json.data;
+      const data = json.data;
+      if (data && data.id && data.name) {
+        storeEntityName(data.type || 'entities', data.id, data.name);
+      }
+      return data;
     } else {
       Logger.log(`❌ Errore ${code} su fetchEntityData(${entityId}): ${response.getContentText()}`);
     }

@@ -3,12 +3,11 @@ function resolveReferences(text) {
   const regex = /\[([a-z_]+):(\d+)\]/gi;
 
   return text.replace(regex, (match, type, id) => {
-    const name = fetchEntityName('entities', id);
-    if (!name || name === `[entities:${id}]`) {
-      Logger.log(`❌ Reference non risolta: [${type}:${id}]`);
+    const resolved = resolveEntityName(type, id);
+    if (!resolved || resolved === `[${type}:${id}]`) {
       return match;
     }
-    return name;
+    return resolved;
   });
 }
 
