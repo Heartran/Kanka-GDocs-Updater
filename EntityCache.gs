@@ -1,4 +1,5 @@
 const entityMaps = {};
+const missingReferenceKeys = new Set();
 
 const referenceTypeAliases = {
   character: 'characters',
@@ -99,8 +100,11 @@ function resolveEntityName(type, id) {
   const normalized = normalizeReferenceType(type);
   const key = String(id);
 
-  if (normalized && entityMaps[normalized] && entityMaps[normalized].has(key)) {
-    return entityMaps[normalized].get(key);
+  if (normalized) {
+    ensureEntityMap(normalized);
+    if (entityMaps[normalized].has(key)) {
+      return entityMaps[normalized].get(key);
+    }
   }
 
   for (const mapType in entityMaps) {
@@ -109,7 +113,16 @@ function resolveEntityName(type, id) {
       return map.get(key);
     }
   }
+  const lookupType = normalized || type;
+  const fetchedName = fetchEntityName(lookupType, id);
+  if (fetchedName && fetchedName !== `[${lookupType}:${id}]`) {
+    return fetchedName;
+  }
 
-  Logger.log(`Reference non risolta: ${type}:${id}`);
+  const missingKey = `${lookupType}:${key}`;
+  if (!missingReferenceKeys.has(missingKey)) {
+    missingReferenceKeys.add(missingKey);
+    Logger.log(`Reference non risolta: ${lookupType}:${key}`);
+  }
   return `[${type}:${id}]`;
 }
