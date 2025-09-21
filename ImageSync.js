@@ -16,8 +16,16 @@ function syncEntityImages() {
   let skipped = 0;
 
   paragraphs.forEach(paragraph => {
-    const placeholder = parseImagePlaceholder(paragraph.getText());
+    const originalText = paragraph.getText();
+    const placeholder = parseImagePlaceholder(originalText);
     if (!placeholder) {
+      return;
+    }
+
+    const trimmed = (originalText || '').trim();
+    const expectedPlaceholder = createImagePlaceholder(placeholder.type, placeholder.id);
+    if (trimmed !== expectedPlaceholder) {
+      Logger.log(`⚠️ Segnaposto immagine ignorato per evitare la perdita di testo: "${trimmed}"`);
       return;
     }
 
@@ -27,7 +35,9 @@ function syncEntityImages() {
       updated++;
     } else {
       skipped++;
-      paragraph.removeFromParent();
+      paragraph.appendText(expectedPlaceholder);
+      paragraph.setForegroundColor('#888888');
+      paragraph.setItalic(true);
     }
   });
 
