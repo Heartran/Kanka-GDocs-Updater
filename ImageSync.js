@@ -28,13 +28,13 @@ function syncEntityImages() {
       Logger.log(`⚠️ Segnaposto immagine ignorato per evitare la perdita di testo: "${trimmed}"`);
       return;
     }
+
     const inserted = insertImageFromPlaceholder(paragraph, placeholder.type, placeholder.id);
     if (inserted) {
       updated++;
     } else {
       skipped++;
       ensurePlaceholderFormatting(paragraph, expectedPlaceholder);
-
     }
   });
 
@@ -65,12 +65,42 @@ function insertImageFromPlaceholder(paragraph, type, id) {
     }
 
     paragraph.clear();
-    paragraph.appendInlineImage(preparedBlob);
+    const inlineImage = paragraph.appendInlineImage(preparedBlob);
+    formatInsertedImage(paragraph, inlineImage);
     return true;
   } catch (e) {
     const name = entity?.name || '(senza nome)';
     Logger.log(`❌ Errore nel caricamento dell'immagine per ${name}: ${e}`);
     return false;
+  }
+}
+
+function formatInsertedImage(paragraph, inlineImage) {
+  if (!inlineImage) {
+    return;
+  }
+
+  const MAX_IMAGE_WIDTH = 320;
+
+  try {
+    const width = inlineImage.getWidth();
+    const height = inlineImage.getHeight();
+    if (width > MAX_IMAGE_WIDTH && width > 0 && height > 0) {
+      const ratio = height / width;
+      inlineImage.setWidth(MAX_IMAGE_WIDTH);
+      inlineImage.setHeight(Math.round(MAX_IMAGE_WIDTH * ratio));
+    }
+  } catch (imageError) {
+    Logger.log(`⚠️ Impossibile ridimensionare l'immagine inserita: ${imageError}`);
+  }
+
+  try {
+    paragraph.setAlignment(DocumentApp.HorizontalAlignment.CENTER);
+    paragraph.setSpacingBefore(6);
+    paragraph.setSpacingAfter(6);
+    paragraph.setLineSpacing(1);
+  } catch (formatError) {
+    Logger.log(`⚠️ Impossibile applicare la formattazione del paragrafo per l'immagine: ${formatError}`);
   }
 }
 
