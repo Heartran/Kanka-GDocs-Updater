@@ -28,13 +28,13 @@ function syncEntityImages() {
       Logger.log(`⚠️ Segnaposto immagine ignorato per evitare la perdita di testo: "${trimmed}"`);
       return;
     }
-
     const inserted = insertImageFromPlaceholder(paragraph, placeholder.type, placeholder.id);
     if (inserted) {
       updated++;
     } else {
       skipped++;
       ensurePlaceholderFormatting(paragraph, expectedPlaceholder);
+
     }
   });
 
