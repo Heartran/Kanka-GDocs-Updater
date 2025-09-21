@@ -12,6 +12,29 @@ function resolveReferences(text) {
   });
 }
 
+const DEFAULT_TEXT_COLOR = '#000000';
+
+function applyNormalTextStyle(element) {
+  if (!element) return element;
+
+  let text;
+  try {
+    text = element.editAsText();
+  } catch (err) {
+    return element;
+  }
+
+  if (!text) return element;
+
+  text.setItalic(false);
+  text.setForegroundColor(DEFAULT_TEXT_COLOR);
+  return element;
+}
+
+function appendNormalParagraph(body, text) {
+  return applyNormalTextStyle(body.appendParagraph(text));
+}
+
 function stripHtml(html) {
   if (!html) return '';
   return html.replace(/<[^>]*>/g, '').trim();
@@ -23,26 +46,46 @@ function addSectionTitle(body, text, level = 2) {
     2: DocumentApp.ParagraphHeading.HEADING2,
     3: DocumentApp.ParagraphHeading.HEADING3
   };
-  return body.appendParagraph(text).setHeading(headingMap[level]);
+  const paragraph = body.appendParagraph(text);
+  paragraph.setHeading(headingMap[level]);
+  return applyNormalTextStyle(paragraph);
 }
 
 function addKeyValueList(body, entries) {
   entries.forEach(entry => {
-    body.appendParagraph(`• ${entry.key}: ${entry.value}`);
+    appendNormalParagraph(body, `• ${entry.key}: ${entry.value}`);
   });
 }
 
 function addTable(body, headers, rows) {
   const table = body.appendTable();
-  table.appendTableRow().appendTableCells(headers);
-  rows.forEach(row => table.appendTableRow().appendTableCells(row));
+  if (table.getNumRows() > 0) {
+    table.removeRow(0);
+  }
+  const headerRow = table.appendTableRow();
+  headers.forEach(header => {
+    const cell = headerRow.appendTableCell(header);
+    const text = cell.editAsText();
+    if (text) {
+      text.setBold(true);
+    }
+    applyNormalTextStyle(cell);
+  });
+
+  rows.forEach(row => {
+    const tableRow = table.appendTableRow();
+    row.forEach(cellValue => {
+      const cell = tableRow.appendTableCell(cellValue);
+      applyNormalTextStyle(cell);
+    });
+  });
 }
 
 function formatCalendarData(doc, entity) {
   const body = doc.getBody();
   addSectionTitle(body, entity.name || "Calendario");
 
-  body.appendParagraph(`📅 Data di riferimento: ${formatCalendarDate(entity.date)}`);
+  appendNormalParagraph(body, `📅 Data di riferimento: ${formatCalendarDate(entity.date)}`);
 
   // Mesi
   addSectionTitle(body, "📘 Mesi dell’anno", 3);
@@ -51,12 +94,12 @@ function formatCalendarData(doc, entity) {
 
   // Giorni settimana
   addSectionTitle(body, "📆 Giorni della settimana", 3);
-  entity.weekdays.forEach(day => body.appendParagraph(`• ${day}`));
+  entity.weekdays.forEach(day => appendNormalParagraph(body, `• ${day}`));
 
   // Stagioni
   addSectionTitle(body, "🌸 Stagioni", 3);
   entity.seasons.forEach(s =>
-    body.appendParagraph(`• ${s.name} – giorno ${s.day} del mese ${s.month}`));
+    appendNormalParagraph(body, `• ${s.name} – giorno ${s.day} del mese ${s.month}`));
 
   // Lune
   addSectionTitle(body, "🌙 Lune", 3);
@@ -67,7 +110,7 @@ function formatCalendarData(doc, entity) {
   if (entity.entity_events?.length) {
     addSectionTitle(body, "🪧 Eventi ricorrenti", 3);
     entity.entity_events.forEach(ev => {
-      body.appendParagraph(`• ${ev.comment} – ${formatCalendarDate(ev.date)}${ev.is_recurring ? " (ricorrente)" : ""}`);
+      appendNormalParagraph(body, `• ${ev.comment} – ${formatCalendarDate(ev.date)}${ev.is_recurring ? " (ricorrente)" : ""}`);
     });
   }
 }
@@ -90,5 +133,5 @@ function formatGenericEntity(doc, entity) {
   const raw = entity.entry || '';
   const parsed = resolveReferences(raw);
   const clean = stripHtml(parsed);
-  body.appendParagraph(clean);
+  appendNormalParagraph(body, clean);
 }
