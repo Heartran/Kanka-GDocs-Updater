@@ -28,16 +28,13 @@ function syncEntityImages() {
       Logger.log(`⚠️ Segnaposto immagine ignorato per evitare la perdita di testo: "${trimmed}"`);
       return;
     }
-
-    paragraph.clear();
     const inserted = insertImageFromPlaceholder(paragraph, placeholder.type, placeholder.id);
     if (inserted) {
       updated++;
     } else {
       skipped++;
-      paragraph.appendText(expectedPlaceholder);
-      paragraph.setForegroundColor('#888888');
-      paragraph.setItalic(true);
+      ensurePlaceholderFormatting(paragraph, expectedPlaceholder);
+
     }
   });
 
@@ -61,18 +58,74 @@ function insertImageFromPlaceholder(paragraph, type, id) {
     }
 
     const blob = response.getBlob();
-    const contentType = blob.getContentType() || '';
-    const bytes = blob.getBytes();
-    if (!contentType.startsWith('image/') || !bytes || bytes.length === 0) {
-      Logger.log(`⚠️ Dati immagine non validi per ${name}: ${entity.image_full}`);
+    const preparedBlob = prepareImageBlob(blob, `${type}-${id}`);
+    if (!preparedBlob) {
+      Logger.log(`⚠️ Dati immagine non utilizzabili per ${name}: ${entity.image_full}`);
       return false;
     }
 
-    paragraph.appendInlineImage(blob);
+    paragraph.clear();
+    paragraph.appendInlineImage(preparedBlob);
     return true;
   } catch (e) {
     const name = entity?.name || '(senza nome)';
     Logger.log(`❌ Errore nel caricamento dell'immagine per ${name}: ${e}`);
     return false;
   }
+}
+
+function ensurePlaceholderFormatting(paragraph, placeholderText) {
+  const currentText = (paragraph.getText() || '').trim();
+  const textElement = paragraph.editAsText();
+  if (!textElement) {
+    return;
+  }
+
+  if (currentText !== placeholderText) {
+    textElement.setText(placeholderText);
+  }
+
+  const length = textElement.getText().length;
+  if (length === 0) {
+    return;
+  }
+
+  textElement.setItalic(0, length - 1, true);
+  textElement.setForegroundColor(0, length - 1, '#888888');
+}
+
+function prepareImageBlob(blob, filenameHint) {
+  if (!blob) {
+    return null;
+  }
+
+  const bytes = blob.getBytes();
+  if (!bytes || bytes.length === 0) {
+    return null;
+  }
+
+  let contentType = (blob.getContentType() || '').toLowerCase();
+  if (!contentType.startsWith('image/')) {
+    return null;
+  }
+
+  const supportedTypes = [MimeType.PNG, MimeType.JPEG, MimeType.GIF, MimeType.BMP];
+  let workingBlob = blob;
+
+  if (!supportedTypes.includes(contentType)) {
+    try {
+      workingBlob = blob.getAs(MimeType.PNG);
+      contentType = MimeType.PNG;
+    } catch (conversionError) {
+      Logger.log(`⚠️ Impossibile convertire l'immagine (${contentType}) in PNG: ${conversionError}`);
+      return null;
+    }
+  }
+
+  if (filenameHint) {
+    const extension = contentType.split('/')[1] || 'png';
+    workingBlob.setName(`${filenameHint}.${extension}`);
+  }
+
+  return workingBlob;
 }
