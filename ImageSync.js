@@ -80,15 +80,22 @@ function formatInsertedImage(paragraph, inlineImage) {
     return;
   }
 
-  const MAX_IMAGE_WIDTH = 320;
-
   try {
-    const width = inlineImage.getWidth();
-    const height = inlineImage.getHeight();
-    if (width > MAX_IMAGE_WIDTH && width > 0 && height > 0) {
-      const ratio = height / width;
-      inlineImage.setWidth(MAX_IMAGE_WIDTH);
-      inlineImage.setHeight(Math.round(MAX_IMAGE_WIDTH * ratio));
+    const targetWidthPoints = getImageDisplayWidthPoints();
+    const desiredWidth = Math.round(targetWidthPoints);
+
+    if (desiredWidth > 0) {
+      const currentWidth = inlineImage.getWidth();
+
+      if (currentWidth > desiredWidth) {
+        inlineImage.setWidth(desiredWidth);
+
+        const currentHeight = inlineImage.getHeight();
+        if (currentHeight > 0 && currentWidth > 0) {
+          const scaledHeight = Math.max(1, Math.round(currentHeight * (desiredWidth / currentWidth)));
+          inlineImage.setHeight(scaledHeight);
+        }
+      }
     }
   } catch (imageError) {
     Logger.log(`⚠️ Impossibile ridimensionare l'immagine inserita: ${imageError}`);
