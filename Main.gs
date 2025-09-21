@@ -40,21 +40,16 @@ function syncAllEntitiesToOneDocument() {
   }
 
   // Intestazione
-  const titleParagraph = body.appendParagraph('📘 Enciclopedia Kanka');
-  titleParagraph.setHeading(DocumentApp.ParagraphHeading.HEADING1);
-  applyNormalTextStyle(titleParagraph);
-
-  appendNormalParagraph(body, `Aggiornato il: ${new Date().toLocaleString()}`);
-  appendNormalParagraph(body, '');
+  body.appendParagraph('📘 Enciclopedia Kanka').setHeading(DocumentApp.ParagraphHeading.HEADING1);
+  body.appendParagraph(`Aggiornato il: ${new Date().toLocaleString()}`);
+  body.appendParagraph('');
 
   supportedTypes.forEach(type => {
     const entities = fetchAllEntities(type); // funzione API che ritorna lista base
     Logger.log(`🗂 ${type}: trovati ${entities.length} elementi`);
 
-    const sectionParagraph = body.appendParagraph('📁 ' + capitalize(type));
-    sectionParagraph.setHeading(DocumentApp.ParagraphHeading.HEADING1);
-    applyNormalTextStyle(sectionParagraph);
-    appendNormalParagraph(body, '');
+    body.appendParagraph('📁 ' + capitalize(type)).setHeading(DocumentApp.ParagraphHeading.HEADING1);
+    body.appendParagraph('');
 
     entities.forEach(entity => {
       const entityData = fetchEntityData(entity.id); // dettagli estesi via API
@@ -68,7 +63,7 @@ function syncAllEntitiesToOneDocument() {
         formatGenericEntity(doc, entityData);
       }
 
-      appendNormalParagraph(body, '');
+      body.appendParagraph('');
     });
   });
 
