@@ -117,7 +117,7 @@ function resolveEntityImageUrl(entity) {
   }
 
   if (entity.image_thumb) {
-    return entity.image_thumb;
+    return buildPreferredThumbUrl(entity.image_thumb);
   }
 
   if (entity.image_full) {
@@ -125,6 +125,29 @@ function resolveEntityImageUrl(entity) {
   }
 
   return null;
+}
+
+function buildPreferredThumbUrl(url) {
+  if (!url) {
+    return null;
+  }
+
+  if (typeof getPreferredImageThumbSize !== 'function') {
+    return url;
+  }
+
+  const preferredSize = getPreferredImageThumbSize();
+  if (!preferredSize || preferredSize === '40x40') {
+    return url;
+  }
+
+  const sizedSegmentPattern = /\/(\d+x\d+)(?=\/|$)/;
+  const sizedUrl = url.replace(sizedSegmentPattern, `/${preferredSize}`);
+  if (sizedUrl !== url) {
+    return sizedUrl;
+  }
+
+  return url.replace(/40x40/g, preferredSize);
 }
 
 function prepareImageBlob(blob, filenameHint) {

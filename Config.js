@@ -1,6 +1,8 @@
 const MASTER_DOCUMENT_KEY = 'GOOGLE_DOC_ID';
 const DEFAULT_IMAGE_DISPLAY_WIDTH_INCHES = 3;
 const POINTS_PER_INCH = 72;
+const IMAGE_THUMB_SIZE_KEY = 'KANKA_IMAGE_THUMB_SIZE';
+const DEFAULT_IMAGE_THUMB_SIZE = '800x800';
 
 function getApiToken() {
   return PropertiesService.getScriptProperties().getProperty('KANKA_API_TOKEN');
@@ -12,6 +14,22 @@ function getCampaignId() {
 
 function getMasterDocumentId() {
   return PropertiesService.getScriptProperties().getProperty(MASTER_DOCUMENT_KEY);
+}
+
+function getPreferredImageThumbSize() {
+  const configured = PropertiesService.getScriptProperties().getProperty(IMAGE_THUMB_SIZE_KEY);
+  if (!configured) {
+    return DEFAULT_IMAGE_THUMB_SIZE;
+  }
+
+  const normalized = configured.trim();
+  const sizePattern = /^\d+x\d+$/;
+  if (!sizePattern.test(normalized)) {
+    Logger.log(`⚠️ Valore non valido per ${IMAGE_THUMB_SIZE_KEY}: "${configured}". Uso il default ${DEFAULT_IMAGE_THUMB_SIZE}.`);
+    return DEFAULT_IMAGE_THUMB_SIZE;
+  }
+
+  return normalized;
 }
 
 function checkRequiredConfig() {
