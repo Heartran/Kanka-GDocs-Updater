@@ -3,7 +3,7 @@ const DEFAULT_IMAGE_DISPLAY_WIDTH_INCHES = 3;
 const POINTS_PER_INCH = 72;
 const TINYPNG_API_KEY_KEY = 'TINYPNG_API_KEY';
 const TINYPNG_MAX_DIMENSION_KEY = 'TINYPNG_MAX_DIMENSION';
-const DEFAULT_TINYPNG_MAX_DIMENSION = 1024;
+const DEFAULT_TINYPNG_MAX_DIMENSION = 800;
 const MAX_TINYPNG_DIMENSION = 4096;
 
 function getApiToken() {
@@ -16,6 +16,22 @@ function getCampaignId() {
 
 function getMasterDocumentId() {
   return PropertiesService.getScriptProperties().getProperty(MASTER_DOCUMENT_KEY);
+}
+
+function getPreferredImageThumbSize() {
+  const configured = PropertiesService.getScriptProperties().getProperty(IMAGE_THUMB_SIZE_KEY);
+  if (!configured) {
+    return DEFAULT_IMAGE_THUMB_SIZE;
+  }
+
+  const normalized = configured.trim();
+  const sizePattern = /^\d+x\d+$/;
+  if (!sizePattern.test(normalized)) {
+    Logger.log(`⚠️ Valore non valido per ${IMAGE_THUMB_SIZE_KEY}: "${configured}". Uso il default ${DEFAULT_IMAGE_THUMB_SIZE}.`);
+    return DEFAULT_IMAGE_THUMB_SIZE;
+  }
+
+  return normalized;
 }
 
 function checkRequiredConfig() {
