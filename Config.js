@@ -1,4 +1,6 @@
 const MASTER_DOCUMENT_KEY = 'GOOGLE_DOC_ID';
+const DEFAULT_IMAGE_DISPLAY_WIDTH_INCHES = 3;
+const POINTS_PER_INCH = 72;
 
 function getApiToken() {
   return PropertiesService.getScriptProperties().getProperty('KANKA_API_TOKEN');
