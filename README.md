@@ -27,6 +27,10 @@ Per utilizzare l'applicazione, è necessario configurare le seguenti variabili d
 1. `KANKA_API_TOKEN`: Il tuo token API di Kanka
 2. `CAMPAIGN_ID`: L'ID della tua campagna Kanka
 3. `GOOGLE_DOC_ID`: L'ID del documento Google Docs dove verranno sincronizzate le entità
+4. `TINYPNG_API_KEY` *(opzionale ma consigliato)*: chiave API TinyPNG/TinyJPG per comprimere e ridimensionare le immagini prima dell'inserimento. Puoi specificare sia la chiave semplice (`YOUR_KEY`) sia il formato `api:YOUR_KEY` usato per la Basic Auth.
+5. `TINYPNG_MAX_DIMENSION` *(opzionale)*: lato massimo, in pixel, dopo il ridimensionamento con TinyPNG. Il valore predefinito è `1024` e i valori superiori a `4096` vengono limitati automaticamente.
+
+Quando è disponibile la chiave TinyPNG, lo script scarica l'immagine `image_full` da Kanka, la comprime e la ridimensiona via API prima di inserirla nel documento. In assenza di chiave, viene usata la miniatura fornita da Kanka come fallback.
 
 ## 🚀 Utilizzo
 
