@@ -27,6 +27,7 @@ Per utilizzare l'applicazione, è necessario configurare le seguenti variabili d
 1. `KANKA_API_TOKEN`: Il tuo token API di Kanka
 2. `CAMPAIGN_ID`: L'ID della tua campagna Kanka
 3. `GOOGLE_DOC_ID`: L'ID del documento Google Docs dove verranno sincronizzate le entità
+4. `KANKA_IMAGE_THUMB_SIZE` *(opzionale)*: dimensione preferita per le miniature (es. `800x800`). Se non impostato o non valido verrà usato il valore predefinito `800x800`.
 
 ## 🚀 Utilizzo
 
