@@ -43,17 +43,22 @@ function syncEntityImages() {
 
 function insertImageFromPlaceholder(paragraph, type, id) {
   const entity = fetchEntity(type, id);
-  if (!entity?.image_full) {
+  const imageUrl = resolveEntityImageUrl(entity);
+  if (!imageUrl) {
     Logger.log(`ℹ️ Nessuna immagine disponibile per ${type}:${id}`);
     return false;
   }
 
   try {
-    const response = UrlFetchApp.fetch(entity.image_full, { muteHttpExceptions: true });
+    if (!entity?.image_thumb && entity?.image_full) {
+      Logger.log(`ℹ️ Miniatura non disponibile per ${type}:${id}, utilizzo l'immagine completa.`);
+    }
+
+    const response = UrlFetchApp.fetch(imageUrl, { muteHttpExceptions: true });
     const code = response.getResponseCode();
     const name = entity.name || '(senza nome)';
     if (code >= 400) {
-      Logger.log(`⚠️ Impossibile caricare l'immagine per ${name} (HTTP ${code}): ${entity.image_full}`);
+      Logger.log(`⚠️ Impossibile caricare l'immagine per ${name} (HTTP ${code}): ${imageUrl}`);
       return false;
     }
 
@@ -65,8 +70,8 @@ function insertImageFromPlaceholder(paragraph, type, id) {
     }
 
     paragraph.clear();
-    const inlineImage = paragraph.appendInlineImage(preparedBlob);
-    formatInsertedImage(paragraph, inlineImage);
+    paragraph.appendInlineImage(preparedBlob);
+    formatInsertedImage(paragraph);
     return true;
   } catch (e) {
     const name = entity?.name || '(senza nome)';
@@ -75,32 +80,7 @@ function insertImageFromPlaceholder(paragraph, type, id) {
   }
 }
 
-function formatInsertedImage(paragraph, inlineImage) {
-  if (!inlineImage) {
-    return;
-  }
-
-  try {
-    const targetWidthPoints = getImageDisplayWidthPoints();
-    const desiredWidth = Math.round(targetWidthPoints);
-
-    if (desiredWidth > 0) {
-      const currentWidth = inlineImage.getWidth();
-
-      if (currentWidth > desiredWidth) {
-        inlineImage.setWidth(desiredWidth);
-
-        const currentHeight = inlineImage.getHeight();
-        if (currentHeight > 0 && currentWidth > 0) {
-          const scaledHeight = Math.max(1, Math.round(currentHeight * (desiredWidth / currentWidth)));
-          inlineImage.setHeight(scaledHeight);
-        }
-      }
-    }
-  } catch (imageError) {
-    Logger.log(`⚠️ Impossibile ridimensionare l'immagine inserita: ${imageError}`);
-  }
-
+function formatInsertedImage(paragraph) {
   try {
     paragraph.setAlignment(DocumentApp.HorizontalAlignment.CENTER);
     paragraph.setSpacingBefore(6);
@@ -129,6 +109,22 @@ function ensurePlaceholderFormatting(paragraph, placeholderText) {
 
   textElement.setItalic(0, length - 1, true);
   textElement.setForegroundColor(0, length - 1, '#888888');
+}
+
+function resolveEntityImageUrl(entity) {
+  if (!entity) {
+    return null;
+  }
+
+  if (entity.image_thumb) {
+    return entity.image_thumb;
+  }
+
+  if (entity.image_full) {
+    return entity.image_full;
+  }
+
+  return null;
 }
 
 function prepareImageBlob(blob, filenameHint) {

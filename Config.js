@@ -43,33 +43,3 @@ function getDocumentIdForType(type) {
   }
   return PropertiesService.getScriptProperties().getProperty(key);
 }
-
-function getImageDisplayWidthPoints() {
-  const properties = PropertiesService.getScriptProperties();
-  const rawPoints = properties.getProperty('IMAGE_DISPLAY_WIDTH_PT');
-  const parsedPoints = parsePositiveNumber(rawPoints);
-  if (parsedPoints) {
-    return parsedPoints;
-  }
-
-  const rawInches = properties.getProperty('IMAGE_DISPLAY_WIDTH_IN');
-  const parsedInches = parsePositiveNumber(rawInches);
-  if (parsedInches) {
-    return parsedInches * POINTS_PER_INCH;
-  }
-
-  return DEFAULT_IMAGE_DISPLAY_WIDTH_INCHES * POINTS_PER_INCH;
-}
-
-function parsePositiveNumber(rawValue) {
-  if (!rawValue) {
-    return null;
-  }
-
-  const value = parseFloat(String(rawValue).trim());
-  if (isNaN(value) || value <= 0) {
-    return null;
-  }
-
-  return value;
-}
