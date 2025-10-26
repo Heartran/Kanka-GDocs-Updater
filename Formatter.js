@@ -55,9 +55,45 @@ function parseImagePlaceholder(text) {
 }
 
 function addKeyValueList(body, entries) {
+  // entries: array di { key, value } oppure oggetto semplice { key: value }
+  if (!entries) return;
+  if (!Array.isArray(entries)) {
+    entries = Object.keys(entries).map(k => ({ key: k, value: entries[k] }));
+  }
   entries.forEach(entry => {
-    body.appendParagraph(`• ${entry.key}: ${entry.value}`);
+    const value = (entry.value === null || entry.value === undefined || entry.value === '') ? '—' : String(entry.value);
+    body.appendParagraph(`• ${entry.key}: ${value}`);
   });
+}
+
+// Aggiunge una sezione metadati comune per qualsiasi entità
+function addMetadata(body, entity) {
+  if (!entity) return;
+  const meta = [];
+  if (entity.id) meta.push({ key: "ID", value: entity.id });
+  if (entity.type) meta.push({ key: "Tipo", value: entity.type });
+  if (entity.slug) meta.push({ key: "Slug", value: entity.slug });
+  if (entity.created_at) meta.push({ key: "Creato", value: formatDateTime(entity.created_at) });
+  if (entity.updated_at) meta.push({ key: "Aggiornato", value: formatDateTime(entity.updated_at) });
+  if (entity.created_by_name) meta.push({ key: "Creato da", value: entity.created_by_name });
+  if (entity.owner_name) meta.push({ key: "Proprietario", value: entity.owner_name });
+
+  if (meta.length > 0) {
+    addSectionTitle(body, "ℹ️ Metadati", 3);
+    addKeyValueList(body, meta);
+  }
+}
+
+function formatDateTime(dt) {
+  if (!dt) return '';
+  // Kanka spesso usa ISO; proviamo il parsing semplice
+  try {
+    const d = new Date(dt);
+    if (isNaN(d.getTime())) return dt;
+    return d.toLocaleString();
+  } catch (e) {
+    return dt;
+  }
 }
 
 function addTable(body, headers, rows) {
