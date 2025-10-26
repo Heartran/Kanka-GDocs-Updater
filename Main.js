@@ -46,6 +46,16 @@ function syncAllEntitiesToOneDocument() {
   body.appendParagraph(`Aggiornato il: ${new Date().toLocaleString()}`);
   body.appendParagraph('');
 
+  // --- NUOVO: Sommario con conteggi per tipo ---
+  addSectionTitle(body, "🧾 Sommario", 2);
+  const summaryRows = [];
+  supportedTypes.forEach(type => {
+    const count = (entitiesByType[type] || []).length;
+    summaryRows.push([capitalize(type), String(count)]);
+  });
+  addTable(body, ["Tipo", "Quantità"], summaryRows);
+  body.appendParagraph('');
+
   supportedTypes.forEach(type => {
     const entities = entitiesByType[type] || [];
     Logger.log(`🗂 ${type}: trovati ${entities.length} elementi`);
