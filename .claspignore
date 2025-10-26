@@ -1,0 +1,3 @@
+# Exclude local-only tooling files from Apps Script deployments
+logs/**
+scripts/**
