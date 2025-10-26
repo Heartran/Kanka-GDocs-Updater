@@ -1,0 +1,4 @@
+# Logger.log statements extracted from Main.js
+Main.js:25: Logger.log('❌ Documento principale non configurato.');
+Main.js:61: Logger.log(`🗂 ${type}: trovati ${entities.length} elementi`);
+Main.js:73: Logger.log(`✅ Documento aggiornato: https://docs.google.com/document/d/${docId}/edit`);

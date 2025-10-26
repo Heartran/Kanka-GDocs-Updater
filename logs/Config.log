@@ -1,0 +1,9 @@
+# Logger.log statements extracted from Config.js
+Config.js:30: Logger.log(`⚠️ Valore non valido per ${IMAGE_THUMB_SIZE_KEY}: "${configured}". Uso il default ${DEFAULT_IMAGE_THUMB_SIZE}.`);
+Config.js:48: Logger.log('Configurazione:');
+Config.js:49: Logger.log(' - Token API: %s', token ? 'OK' : 'MANCANTE');
+Config.js:50: Logger.log(' - ID Campagna: %s', campaignId ? 'OK' : 'MANCANTE');
+Config.js:51: Logger.log(' - ID Google Doc: %s', docId ? 'OK' : 'MANCANTE');
+Config.js:61: Logger.log(`❌ Tipo non supportato per document ID: ${type}`);
+Config.js:84: Logger.log(`⚠️ Valore non valido per ${TINYPNG_MAX_DIMENSION_KEY}: "${configured}". Uso il default ${DEFAULT_TINYPNG_MAX_DIMENSION}.`);
+Config.js:89: Logger.log(`ℹ️ Limito ${TINYPNG_MAX_DIMENSION_KEY} a ${MAX_TINYPNG_DIMENSION} px.`);

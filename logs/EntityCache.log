@@ -1,0 +1,2 @@
+# Logger.log statements extracted from EntityCache.js
+EntityCache.js:92: Logger.log(`Precaricati ${count} elementi da ${type}`);

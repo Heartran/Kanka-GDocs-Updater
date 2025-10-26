@@ -1,0 +1,17 @@
+# Logger.log statements extracted from ImageSync.js
+ImageSync.js:8: Logger.log('❌ Documento principale non configurato.');
+ImageSync.js:28: Logger.log(`⚠️ Segnaposto immagine ignorato per evitare la perdita di testo: "${trimmed}"`);
+ImageSync.js:41: Logger.log(`${IMAGE_PLACEHOLDER_MESSAGE}: ${updated} inserite, ${skipped} senza immagine`);
+ImageSync.js:51: Logger.log(`ℹ️ Nessuna immagine disponibile per ${entityLabel}`);
+ImageSync.js:61: Logger.log(`❌ Errore nell'inserimento dell'immagine per ${entityLabel}: ${e}`);
+ImageSync.js:73: Logger.log(`⚠️ Impossibile applicare la formattazione del paragrafo per l'immagine: ${formatError}`);
+ImageSync.js:129: Logger.log(`ℹ️ Utilizzo la miniatura Kanka per ${entityLabel}.`);
+ImageSync.js:147: Logger.log(`⚠️ Impossibile scaricare ${description} per ${entityLabel} (HTTP ${code}): ${url}`);
+ImageSync.js:153: Logger.log(`❌ Errore durante lo scaricamento di ${description} per ${entityLabel}: ${error}`);
+ImageSync.js:170: Logger.log(`⚠️ Dati immagine non utilizzabili per ${entityLabel}.`);
+ImageSync.js:201: Logger.log(`⚠️ Compressione TinyPNG fallita per ${entityLabel} (HTTP ${shrinkCode}): ${shrinkResp.getContentText()}`);
+ImageSync.js:207: Logger.log(`⚠️ Risposta TinyPNG senza URL di output per ${entityLabel}.`);
+ImageSync.js:224: Logger.log(`⚠️ Ridimensionamento TinyPNG fallito per ${entityLabel} (HTTP ${resizeCode}): ${resizeResp.getContentText()}`);
+ImageSync.js:241: Logger.log(`⚠️ Download TinyPNG fallito per ${entityLabel} (HTTP ${finalCode}): ${tinyUrl}`);
+ImageSync.js:247: Logger.log(`⚠️ Impossibile ridimensionare l'immagine con TinyPNG per ${entityLabel}: ${error}`);
+ImageSync.js:313: Logger.log(`⚠️ Impossibile convertire l'immagine (${contentType}) in PNG: ${conversionError}`);

@@ -1,0 +1,15 @@
+# Logger.log statements extracted from KankaAPI.js
+KankaAPI.js:43: Logger.log(`Tentativo ${attempt + 1} fallito. Nuovo tentativo tra ${delay}ms`);
+KankaAPI.js:72: Logger.log(`Recupero pagina ${page} per ${type}...`);
+KankaAPI.js:93: Logger.log(`Recuperate ${results.length} di ${totalItems} ${type} in ${page - 1} pagine`);
+KankaAPI.js:98: Logger.log(`Errore durante il recupero delle entità di tipo ${type}: ${error.message}`);
+KankaAPI.js:111: Logger.log(`Totale personaggi trovati: ${characters.length}`);
+KankaAPI.js:114: Logger.log(`Errore durante il recupero dei personaggi: ${error.message}`);
+KankaAPI.js:150: Logger.log(`Recupero entità da ${url}...`);
+KankaAPI.js:170: Logger.log(`Errore durante il recupero dell'entità ${type}/${id}: ${error.message}`);
+KankaAPI.js:176: Logger.log(`Entità ${type}/${id} non trovata`);
+KankaAPI.js:201: Logger.log(`Recupero dati entità ${entityId} da ${url}...`);
+KankaAPI.js:218: Logger.log(`Trovata entità ${entityType}/${data.id}: ${data.name}`);
+KankaAPI.js:224: Logger.log(`Nessun dato trovato per l'entità ${entityId}`);
+KankaAPI.js:227: Logger.log(`Errore durante il recupero dei dati per l'entità ${entityId}: ${error.message}`);
+KankaAPI.js:231: Logger.log(`Entità ${entityId} non trovata`);
