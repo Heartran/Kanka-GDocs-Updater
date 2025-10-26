@@ -1,4 +1,6 @@
 # Logger.log statements extracted from Main.js
-Main.js:25: Logger.log('❌ Documento principale non configurato.');
-Main.js:61: Logger.log(`🗂 ${type}: trovati ${entities.length} elementi`);
-Main.js:73: Logger.log(`✅ Documento aggiornato: https://docs.google.com/document/d/${docId}/edit`);
+Main.js:50: Logger.log('[ERRORE] Documento principale non configurato.');
+Main.js:73: Logger.log(`[OK] Documento aggiornato: https://docs.google.com/document/d/${docId}/edit`);
+Main.js:136: Logger.log(`[WARN] Impossibile verificare il tempo rimanente: ${error}`);
+Main.js:142: Logger.log('[INFO] Tempo quasi esaurito. Pianifico una nuova esecuzione per completare la sincronizzazione.');
+Main.js:175: Logger.log(`[WARN] Stato di sincronizzazione non valido. Riparto da zero: ${error}`);
