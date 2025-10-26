@@ -1,5 +1,4 @@
 function formatCharacterData(doc, entity) {
-  // Clear the document first
   const body = doc.getBody();
   body.clear();
   
@@ -12,21 +11,6 @@ function formatCharacterData(doc, entity) {
     addEntityImagePlaceholder(body, 'characters', entity);
   }
   
-  // Create tabs
-  const tabs = doc.getTabs();
-  tabs.forEach(tab => doc.removeTab(tab));
-  
-  // Create all tabs we'll need
-  const overviewTab = doc.addTab(DocumentApp.TabType.BODY, 'Panoramica');
-  const attributesTab = doc.addTab(DocumentApp.TabType.BODY, 'Attributi');
-  const personalityTab = doc.addTab(DocumentApp.TabType.BODY, 'Personalità');
-  const relationshipsTab = doc.addTab(DocumentApp.TabType.BODY, 'Relazioni');
-  const inventoryTab = doc.addTab(DocumentApp.TabType.BODY, 'Inventario');
-  const notesTab = doc.addTab(DocumentApp.TabType.BODY, 'Note & Altro');
-  
-  // Set the first tab as active
-  doc.setActiveTab(overviewTab);
-  
   // Helper function to add a section with title and content
   const addSection = (tabBody, title, content, level = 3) => {
     if (content && content.trim() !== '') {
@@ -38,7 +22,7 @@ function formatCharacterData(doc, entity) {
   };
   
   // --- PANORAMICA TAB ---
-  const overviewBody = overviewTab.asDocumentTab().getBody();
+  const overviewBody = body;
   
   // Add metadata (creator, last update, etc.)
   addMetadata(overviewBody, entity);
@@ -129,7 +113,7 @@ function formatCharacterData(doc, entity) {
   }
   
   // --- ATTRIBUTI TAB ---
-  const attributesBody = attributesTab.asDocumentTab().getBody();
+  const attributesBody = body;
   
   // Add custom attributes
   if (entity.attributes && entity.attributes.length > 0) {
@@ -158,7 +142,7 @@ function formatCharacterData(doc, entity) {
   }
   
   // --- PERSONALITÀ TAB ---
-  const personalityBody = personalityTab.asDocumentTab().getBody();
+  const personalityBody = body;
   
   // Process traits if available
   if (Array.isArray(entity.traits) && entity.traits.length > 0) {
@@ -192,7 +176,7 @@ function formatCharacterData(doc, entity) {
   }
   
   // --- RELAZIONI TAB ---
-  const relationshipsBody = relationshipsTab.asDocumentTab().getBody();
+  const relationshipsBody = body;
   
   if (entity.relations && entity.relations.length > 0) {
     // Group relations by type
@@ -226,7 +210,7 @@ function formatCharacterData(doc, entity) {
   }
   
   // --- INVENTARIO TAB ---
-  const inventoryBody = inventoryTab.asDocumentTab().getBody();
+  const inventoryBody = body;
   
   if (entity.inventory && entity.inventory.length > 0) {
     // Group inventory by location if available
@@ -257,7 +241,7 @@ function formatCharacterData(doc, entity) {
   }
   
   // --- NOTE & ALTRO TAB ---
-  const notesBody = notesTab.asDocumentTab().getBody();
+  const notesBody = body;
   
   // Add private notes if available and visible
   if (entity.private_notes && entity.is_private_visible !== false) {
