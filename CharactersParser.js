@@ -1,12 +1,37 @@
 function formatCharacterData(doc, entity) {
+  // Clear the document first
   const body = doc.getBody();
-  addSectionTitle(body, entity.name || '(senza nome)', 2);
+  body.clear();
+  
+  // Add character name as document title
+  body.appendParagraph(entity.name || '(senza nome)')
+    .setHeading(DocumentApp.ParagraphHeading.TITLE);
+  
+  // Add character image
   addEntityImagePlaceholder(body, 'characters', entity);
-
-  // Metadati
-  addMetadata(body, entity);
-
-  // Informazioni principali
+  
+  // Create tabs
+  const tabs = doc.getTabs();
+  
+  // Remove existing tabs if any
+  tabs.forEach(tab => doc.removeTab(tab));
+  
+  // Create main tabs
+  const overviewTab = doc.addTab(DocumentApp.TabType.BODY, 'Panoramica');
+  const attributesTab = doc.addTab(DocumentApp.TabType.BODY, 'Attributi');
+  const relationshipsTab = doc.addTab(DocumentApp.TabType.BODY, 'Relazioni');
+  const inventoryTab = doc.addTab(DocumentApp.TabType.BODY, 'Inventario');
+  
+  // Set the first tab as active
+  doc.setActiveTab(overviewTab);
+  
+  // --- PANORAMICA TAB ---
+  const overviewBody = overviewTab.asDocumentTab().getBody();
+  
+  // Add metadata
+  addMetadata(overviewBody, entity);
+  
+  // Add main information
   const main = [];
   if (entity.title) main.push({ key: 'Titolo', value: entity.title });
   if (entity.type) main.push({ key: 'Tipo', value: entity.type });
@@ -23,65 +48,85 @@ function formatCharacterData(doc, entity) {
   else if (entity.location_id) main.push({ key: 'Posizione', value: resolveEntityName('locations', entity.location_id) });
 
   if (main.length > 0) {
-    addSectionTitle(body, "🔎 Informazioni principali", 3);
-    addKeyValueList(body, main);
+    addSectionTitle(overviewBody, "🔎 Informazioni principali", 3);
+    addKeyValueList(overviewBody, main);
   }
-
-  // Descrizione
+  
+  // Add biography
   const raw = entity.entry || '';
   const parsed = resolveReferences(raw);
   const clean = stripHtml(parsed);
   if (clean) {
-    addSectionTitle(body, "📝 Biografia / Note", 3);
-    body.appendParagraph(clean);
+    addSectionTitle(overviewBody, "📝 Biografia / Note", 3);
+    overviewBody.appendParagraph(clean);
   }
-
-  // Attributi personalizzati (se presenti)
-  if (entity.attributes && entity.attributes.length > 0) {
-    addSectionTitle(body, "🧬 Attributi", 3);
-    entity.attributes.forEach(attr => {
-      body.appendParagraph(`• ${attr.name}: ${attr.value}`);
-    });
-  }
-
-  // Tratti / Tag della personalità
-  if (Array.isArray(entity.traits) && entity.traits.length > 0) {
-    addSectionTitle(body, "✨ Tratti", 3);
-    entity.traits.forEach(t => body.appendParagraph(`• ${t}`));
-  } else if (Array.isArray(entity.tags) && entity.tags.length > 0) {
-    addSectionTitle(body, "🏷️ Tags", 3);
-    entity.tags.forEach(t => body.appendParagraph(`• ${t.name || t}`));
-  }
-
-  // Relazioni
-  if (entity.relations && entity.relations.length > 0) {
-    addSectionTitle(body, "🤝 Relazioni", 3);
-    entity.relations.forEach(rel => {
-      const target = rel.target_name || (rel.target_id ? resolveEntityName('characters', rel.target_id) : '[sconosciuto]');
-      const role = rel.role || rel.type || 'Relazione';
-      body.appendParagraph(`• ${role} con ${target}`);
-    });
-  }
-
-  // Inventario
-  if (entity.inventory && entity.inventory.length > 0) {
-    addSectionTitle(body, "🎒 Inventario", 3);
-    entity.inventory.forEach(item => {
-      const line = `• ${item.name || item.entity?.name || item.entity_name || 'Oggetto'}${item.amount ? ` (${item.amount})` : ''}${item.notes ? ` — ${stripHtml(item.notes)}` : ''}`;
-      body.appendParagraph(line);
-    });
-  }
-
-  // Personalizzazioni libere (appearance, history, notes...)
+  
+  // Add appearance and history to overview
   const extras = [];
   if (entity.appearance) extras.push({ key: 'Aspetto', value: stripHtml(resolveReferences(entity.appearance)) });
   if (entity.history) extras.push({ key: 'Storia', value: stripHtml(resolveReferences(entity.history)) });
   if (entity.private_notes) extras.push({ key: 'Note private', value: stripHtml(resolveReferences(entity.private_notes)) });
 
   if (extras.length > 0) {
-    addSectionTitle(body, "🔧 Altri dettagli", 3);
-    addKeyValueList(body, extras);
+    addSectionTitle(overviewBody, "🔧 Altri dettagli", 3);
+    addKeyValueList(overviewBody, extras);
   }
-
-  body.appendParagraph('');
+  
+  // --- ATTRIBUTI TAB ---
+  const attributesBody = attributesTab.asDocumentTab().getBody();
+  
+  // Add custom attributes
+  if (entity.attributes && entity.attributes.length > 0) {
+    addSectionTitle(attributesBody, "🧬 Attributi personalizzati", 2);
+    entity.attributes.forEach(attr => {
+      attributesBody.appendParagraph(`• ${attr.name}: ${attr.value}`);
+    });
+  }
+  
+  // Add traits/personality
+  if (Array.isArray(entity.traits) && entity.traits.length > 0) {
+    addSectionTitle(attributesBody, "✨ Tratti della personalità", 2);
+    entity.traits.forEach(t => attributesBody.appendParagraph(`• ${t}`));
+  } else if (Array.isArray(entity.tags) && entity.tags.length > 0) {
+    addSectionTitle(attributesBody, "🏷️ Tags", 2);
+    entity.tags.forEach(t => attributesBody.appendParagraph(`• ${t.name || t}`));
+  }
+  
+  // --- RELAZIONI TAB ---
+  const relationshipsBody = relationshipsTab.asDocumentTab().getBody();
+  
+  if (entity.relations && entity.relations.length > 0) {
+    addSectionTitle(relationshipsBody, "🤝 Relazioni", 2);
+    entity.relations.forEach(rel => {
+      const target = rel.target_name || (rel.target_id ? resolveEntityName('characters', rel.target_id) : '[sconosciuto]');
+      const role = rel.role || rel.type || 'Relazione';
+      relationshipsBody.appendParagraph(`• ${role} con ${target}`);
+    });
+  } else {
+    relationshipsBody.appendParagraph("Nessuna relazione registrata.")
+      .setItalic(true);
+  }
+  
+  // --- INVENTARIO TAB ---
+  const inventoryBody = inventoryTab.asDocumentTab().getBody();
+  
+  if (entity.inventory && entity.inventory.length > 0) {
+    addSectionTitle(inventoryBody, "🎒 Inventario", 2);
+    entity.inventory.forEach(item => {
+      const line = `• ${item.name || item.entity?.name || item.entity_name || 'Oggetto'}${item.amount ? ` (${item.amount})` : ''}${item.notes ? ` — ${stripHtml(item.notes)}` : ''}`;
+      inventoryBody.appendParagraph(line);
+    });
+  } else {
+    inventoryBody.appendParagraph("L'inventario è vuoto.")
+      .setItalic(true);
+  }
+  
+  // Add a small footer with last update info
+  const lastUpdate = entity.updated_at || entity.created_at || '';
+  if (lastUpdate) {
+    const formattedDate = Utilities.formatDate(new Date(lastUpdate), Session.getScriptTimeZone(), 'dd/MM/yyyy HH:mm');
+    body.appendParagraph(`\n\nUltimo aggiornamento: ${formattedDate}`)
+      .setFontSize(8)
+      .setForegroundColor('#666666');
+  }
 }
